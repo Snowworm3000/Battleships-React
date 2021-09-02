@@ -36,6 +36,7 @@ def move(json):
         print('win')
         # break
     print(str(result))
+    return result
 
 
 def takeShotAt(gameInstance, activePlayer, target):

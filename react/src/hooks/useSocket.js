@@ -21,7 +21,8 @@ function useClient() {
     }
 
     function onMove(x, y) {
-        socket.current.emit("move", { x, y })
+        console.log("move")
+        socket.current.emit("move", { x, y }, response)
     }
 
     socket.current.on('connect', function () {

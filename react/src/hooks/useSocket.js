@@ -1,4 +1,5 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { useEffect } from "react/cjs/react.development";
 import io from "socket.io-client"
 
 
@@ -6,9 +7,9 @@ function useClient() {
     const server = "localhost:5000" // TODO: Server can be removed as a parameter in io() if the socket.io server is hosted on the same server serving the react files. Otherwise, set the string to the domain or ip address of the socket.io server.
     const socket = useRef(io(server))
 
-    let pending = true // TODO: Whether the client can make a move or not. This should be set on the server as well.
+    let pending = useRef(true) // TODO: Whether the client can make a move or not. This should be set on the server as well.
 
-    startGame()
+    useEffect(startGame,[])
 
     function startGame(params) {
         socket.current.emit("startGame", params, response)
@@ -17,8 +18,10 @@ function useClient() {
 
     function response(response) {
         console.log(response, " response 🤖")
-        pending = !response
+        pending.current = (!response)
+        console.log(pending)
     }
+    
 
     function onMove(x, y) {
         console.log("move")

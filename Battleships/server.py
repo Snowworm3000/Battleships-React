@@ -29,14 +29,17 @@ def connect():
 
 @socketio.on("move")
 def move(json):
-    print('move', str(json))
+    print('move', str(json), json["x"])
     game = instances[request.sid]
-    result = takeShotAt(game, 'P1', 'P2')
+    # result = takeShotAt(game, 'P1', 'P2')
+    result = game.takeShot("P1", "P2", xCoord=json["x"], yCoord=json["y"])
     if result == 'P1':
         print('win')
         # break
-    print(str(result))
+    print(str(result), "🤮")
+    # return [result, request.sid]
     return result
+    # return "hit"
 
 
 def takeShotAt(gameInstance, activePlayer, target):

@@ -10,7 +10,7 @@ import Cell from "./Cell";
 import Draggable from "../Battleships/Draggable";
 import BoardContainer from "../Battleships/BoardContainer";
 
-function GameBoard({ rows, cols, spacing, boardSize, tiles, onMove, battleships, addBattleship }) {
+function GameBoard({ rows, cols, spacing, boardSize, tiles, onMove, battleships, addBattleship, battleshipTemp, battleshipBoard }) {
   const [{ width: tileWidth, height: tileHeight }, setTileSize] = useState(() =>
     calcTileSize(boardSize, rows, cols, spacing),
   );
@@ -51,7 +51,7 @@ function GameBoard({ rows, cols, spacing, boardSize, tiles, onMove, battleships,
         cols={cols}
         spacing={spacing}>
         {Cells}
-        <BoardContainer tileWidth={tileWidth} tileHeight={tileHeight} battleships={battleships}/>
+        <BoardContainer tileWidth={tileWidth} tileHeight={tileHeight} battleships={battleships} battleshipTemp={battleshipTemp} battleshipBoard={battleshipBoard} spacing={spacing}/>
         <Draggable x={calcLocation(tileWidth, 1, spacing)}
             y={calcLocation(tileHeight, 1, spacing)} 
             width={tileWidth*4} 

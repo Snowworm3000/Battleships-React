@@ -4,13 +4,17 @@ import Battleship from './Battleship'
 
 function Draggable({width, setDragging, draggable, name, ...props}) {
 
-    function handleDrag(){
+    function handleDrag(e){
         console.log("dragging", name)
         setDragging(name)
     }
+
+    function handleDragEnd(e){
+        setDragging(null)
+    }
     return (
         <>
-            <Battleship onDragStart={handleDrag} height={50} width={width} draggable='true' src={image} {...props}></Battleship>
+            <Battleship onDragStart={handleDrag} onDragEnd={handleDragEnd} height={50} width={width} draggable='true' src={image} {...props}></Battleship>
         </>
     )
 }

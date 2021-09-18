@@ -63,20 +63,36 @@ function App() {
   const [battleshipHover, setBattleshipHover] = useState(null)
   const [battleshipBoard, setBattleshipBoard] = useState([])
 
-  function setDragging(battleship){
-    battleshipPositions.current.dragging = battleship
+  function setDragging(battleship){ // if dragging is null, set the position of the battleship
+    // battleshipPositions.current.dragging = battleship
+    // console.log("setDragging", battleshipPositions)
+
+    if(battleship){
+      battleshipPositions.current.dragging = battleship
+    } else {
+      battleshipPositions.current.dragging = null
+      // setBattleshipBoard(prev => [...prev, battleshipHover]) // TODO: This seemed to be causing an issue with two battleships being created in the same position but delayed until after a dragged battleship moved back.
+      // setBattleshipHover(null)
+    }
     console.log("setDragging", battleshipPositions)
   }
   function addBattleship(x,y,hover){ // TODO: if this is a hover it is not permanent
     const battleship = battleshipPositions.current.dragging
     if(hover){
       // battleshipPositions.current.hover = {x,y, battleship}
-      setBattleshipHover({x,y,battleship})
+      const setTo = {x,y,battleship}
+      if(battleshipHover != setTo){ // TODO: should prevent multiple rerenders when hovering on the same square position
+        console.log("!=", setTo, battleshipHover)
+        setBattleshipHover(setTo)
+      }
     } else {
       // battleshipPositions.current.board.push({x,y, battleship})
       // battleshipPositions.current.hover = null
+
+      
       setBattleshipBoard((prev) => [{x,y,battleship}, ...prev])
       setBattleshipHover(null)
+      console.log("🙉 Set battleship not hover")
     } 
     
     console.log(battleshipPositions)
@@ -108,6 +124,8 @@ function App() {
             onMove={onMove}
             battleships={battleshipPositions}
             addBattleship={addBattleship}
+            battleshipTemp={battleshipHover}
+            battleshipBoard={battleshipBoard}
           />
         </TileContainer>
         {/* <p>Opponent</p>
@@ -119,6 +137,9 @@ function App() {
         /> */}
         <BattleshipContainer setDragging={setDragging} battleships={battleshipPositions.container}></BattleshipContainer>
       </div>
+      {/* <div onDragOver={() => console.log("hover")} onDrop={()=> console.log("drop")}>
+        test
+      </div> */}
     </ThemeProvider>
   );
 }

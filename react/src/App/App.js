@@ -14,7 +14,7 @@ import TileContainer from '../components/TileContainer';
 import useClient from '../hooks/useSocket';
 import Draggable from '../components/Battleships/Draggable';
 import BattleshipContainer from '../components/Battleships/Container';
-import { battleshipsNames } from '../constants/battleships';
+import { battleshipsConfig, battleshipsNames, isValidPosition, rotation } from '../constants/battleships';
 import { useRef } from 'react';
 
 function App() {
@@ -53,31 +53,48 @@ function App() {
   });
 
 
-  const battleshipPositions = useRef({
-    // board: [],
-    // hover: null,
-    container: battleshipsNames,
-    dragging: null
-  }) // TODO: Remember to use battleships config in constants
+  const battleshipDragging= useRef(null)
+  //   // board: [],
+  //   // hover: null,
+  //   // container: battleshipsNames,
+  //   dragging: null
+  // }) // TODO: Remember to use battleships config in constants
 
   const [battleshipHover, setBattleshipHover] = useState(null)
   const [battleshipBoard, setBattleshipBoard] = useState([])
+  const [battleshipContainer, setBattleshipContainer] = useState(battleshipsNames)
 
   function setDragging(battleship){ // if dragging is null, set the position of the battleship
     // battleshipPositions.current.dragging = battleship
     // console.log("setDragging", battleshipPositions)
 
     if(battleship){
-      battleshipPositions.current.dragging = battleship
+      battleshipDragging.current = battleship
     } else {
-      battleshipPositions.current.dragging = null
+      battleshipDragging.current = null
       // setBattleshipBoard(prev => [...prev, battleshipHover]) // TODO: This seemed to be causing an issue with two battleships being created in the same position but delayed until after a dragged battleship moved back.
       // setBattleshipHover(null)
     }
-    console.log("setDragging", battleshipPositions)
+    console.log("setDragging", battleshipDragging.current)
+  }
+  function setDraggingBoard(battleship){
+    if(battleship){
+      battleshipDragging.current = battleship
+    } else {
+      battleshipDragging.current = null
+    }
+    console.log("removing", battleshipBoard)
+    setBattleshipBoard((prev) => {
+      const index = prev.findIndex(element => element.battleship == battleship)
+      console.log(index, "index", battleship)
+        if(index > -1){
+          prev.splice(index, 1)
+        }
+      return prev
+    }) // TODO: Remove battleship from battleshipBoard
   }
   function addBattleship(x,y,hover){ // TODO: if this is a hover it is not permanent
-    const battleship = battleshipPositions.current.dragging
+    const battleship = battleshipDragging.current
     if(hover){
       // battleshipPositions.current.hover = {x,y, battleship}
       const setTo = {x,y,battleship}
@@ -88,14 +105,43 @@ function App() {
     } else {
       // battleshipPositions.current.board.push({x,y, battleship})
       // battleshipPositions.current.hover = null
-
+      const validMove = isValidPosition(rotationRef.current ? x : y, battleshipsConfig[battleship])
+      console.log(validMove, rotationRef.current)
       
-      setBattleshipBoard((prev) => [{x,y,battleship}, ...prev])
       setBattleshipHover(null)
-      console.log("🙉 Set battleship not hover")
+      
+      if(validMove){
+        setBattleshipBoard((prev) => [{x,y,battleship, savedRotation:rotationRef.current}, ...prev])
+
+        console.log("🙉 Set battleship not hover", battleship, rotationRef.current)
+        setBattleshipContainer(prev => {
+          // if()
+          const index = prev.indexOf(battleship)
+          if(index > -1){
+            prev.splice(index, 1)
+          }
+          console.log(battleship, prev, "checking")
+          // return prev.splice(prev.indexOf(battleship), 1)
+          return prev
+        })
+      } else {
+        console.log("invalid move")
+      }
+
     } 
-    
-    console.log(battleshipPositions)
+    console.log(battleshipDragging.current)
+  }
+  
+  const [battleshipRotation, setBattleshipRotation] = useState(rotation.horizontal)
+  const rotationRef = useRef(battleshipRotation)
+
+  useEffect(() => {
+    rotationRef.current = battleshipRotation;
+    console.log(rotationRef, "changed 🐯")
+  }, [battleshipRotation])
+
+  function toggleRotation(){
+    setBattleshipRotation(prev => !prev)
   }
 
 
@@ -122,8 +168,9 @@ function App() {
             spacing={spacing}
             boardSize={gridSize}
             onMove={onMove}
-            battleships={battleshipPositions}
+            rotation={battleshipRotation}
             addBattleship={addBattleship}
+            setDragging={setDraggingBoard}
             battleshipTemp={battleshipHover}
             battleshipBoard={battleshipBoard}
           />
@@ -135,7 +182,8 @@ function App() {
           spacing={spacing}
           boardSize={gridSize}
         /> */}
-        <BattleshipContainer setDragging={setDragging} battleships={battleshipPositions.container}></BattleshipContainer>
+        <button onClick={toggleRotation}>Rotate</button>
+        <BattleshipContainer rotation={battleshipRotation} setDragging={setDragging} battleships={battleshipContainer}></BattleshipContainer>
       </div>
       {/* <div onDragOver={() => console.log("hover")} onDrop={()=> console.log("drop")}>
         test

@@ -19,7 +19,7 @@ export default function Cell(props) {
         event.preventDefault();
     }
 
-    function handleDrop(event){
+    function handleDrop(event){ // TODO: Sometimes battleships do not drop when it is dropped in between cells, but the placeholder (hovering) stays.
         // debugger
         const y = Math.floor(props.position/10)
         const x = props.position%10

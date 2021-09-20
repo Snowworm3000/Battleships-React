@@ -13,3 +13,15 @@ export const battleshipsNames = [
     'Submarine', 
     'Destroyer' 
 ]
+
+export const rotation = {
+    horizontal: true,
+    vertical: false
+}
+
+const boardSize = 10
+
+export const isValidPosition = (pos,length) => { // Pos is either x or y depending on the rotation of the battleship
+    const max = boardSize - length
+    return pos <= max
+}

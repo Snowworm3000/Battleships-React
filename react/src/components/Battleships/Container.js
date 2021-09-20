@@ -7,8 +7,8 @@ function BattleshipContainer(props) {
     const widthMultiplier = 50
 
     let battleships = []
-    for (var key in battleshipsConfig){
-        battleships.push(<Draggable setDragging={props.setDragging} key={key} name={key} width={battleshipsConfig[key] * widthMultiplier}></Draggable>)
+    for (var name of props.battleships){
+        battleships.push(<Draggable rotation={props.rotation} setDragging={props.setDragging} key={name} name={name} lengthMultiplier={widthMultiplier} length={battleshipsConfig[name]}></Draggable>)
     }
 
     return (

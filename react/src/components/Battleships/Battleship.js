@@ -1,13 +1,14 @@
 import styled from "styled-components";
 
 export default styled.img.attrs(
-    ({ width, height, x, y, position, clickable = "auto" }) => ({
+    ({ width, height, x, y, position, rotation, clickable = "auto" }) => ({
         style: {
           width: `${width}px`,
           height: `${height}px`,
           transform: `${`translate(${x}px, ${y}px)`}`,
         'pointer-events': `${clickable}`,
-          position: `${position}`
+          float: `${rotation? "none" : "left"}`,
+          position: `${position}`,
         },
       }),
 )`

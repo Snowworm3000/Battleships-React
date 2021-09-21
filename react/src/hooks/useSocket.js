@@ -11,11 +11,21 @@ function useClient() {
 
     let pending = useRef(true) // TODO: Whether the client can make a move or not. This should be set on the server as well.
 
-    useEffect(startGame,[])
+    // useEffect(startGame,[])
 
     function startGame(params) {
-        socket.current.emit("startGame", params, response)
+        socket.current.emit("startGame", formatParams(params), response)
         console.log("start")
+    }
+
+    function formatParams(params){
+        const formatted = []
+        for(const ship of params.battleships){
+            const coords = {x: ship.x, y: ship.y}
+            const direction = ship.savedRotation ? 0 : 1
+            formatted.push([ship.battleship, coords, direction])
+        }
+        return formatted
     }
 
     function response(response) {
@@ -42,7 +52,7 @@ function useClient() {
         socket.current.emit('my event', { data: 'I\'m connected!' });
     });
 
-    return { serverMove: onMove, pending }
+    return { serverMove: onMove, pending, startGame }
 }
 
 export default useClient

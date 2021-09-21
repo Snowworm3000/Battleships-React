@@ -41,7 +41,7 @@ function App() {
   );
 
   
-  const {serverMove, pending} = useClient()
+  const {serverMove, pending, startGame} = useClient()
 
   const { tiles, onMove } = useGameBoard({
     rows,
@@ -182,6 +182,8 @@ function App() {
           spacing={spacing}
           boardSize={gridSize}
         /> */}
+
+        <button onClick={() => startGame({battleships: battleshipBoard})}>Start</button>
         <button onClick={toggleRotation}>Rotate</button>
         <BattleshipContainer rotation={battleshipRotation} setDragging={setDragging} battleships={battleshipContainer}></BattleshipContainer>
       </div>

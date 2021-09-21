@@ -80,13 +80,76 @@ def setBoard(gameInstance, player):
         
     return result
 
+
+ansiColours = {\
+        'black' : '\033[30m', \
+        'boldBlack' : '\033[30;1m', \
+        'red': '\033[31m', \
+        'boldRed': '\033[31;1m', \
+        'green': '\033[32m', \
+        'boldGreen': '\033[32;1m', \
+        'yellow' : '\033[33m', \
+        'boldYellow' : '\033[33;1m', \
+        'blue': '\033[34m', \
+        'boldBlue': '\033[34;1m', \
+        'magenta' : '\033[35m', \
+        'boldMagenta' : '\033[35;1m', \
+        'cyan' : '\033[36m', \
+        'boldCyan' : '\033[36;1m', \
+        'white' : '\033[37m', \
+        'boldWhite' : '\033[37;1m', \
+        'reset': '\033[0m' \
+        }
+resetColour = ansiColours['reset']
+boardColour = ansiColours['blue']
+yLabelColour = ansiColours['boldWhite']
+xLabelColour = ansiColours['boldWhite']
+shipColour = ansiColours['yellow']
+missColour = ansiColours['cyan']
+hitColour  = ansiColours['boldRed']
+sunkColour = ansiColours['red']
+def printBoard(board):
+    # TODO aloow printing of boards side by side
+    # TODO move cursor to print only changing information (low)
+    yLabel = 9
+    string = boardColour+'   _______________________________________\n'+resetColour
+    for i in range(len(board)-1, -1, -1):
+        string += yLabelColour+str(yLabel)+resetColour
+        for j in board[i]:
+            string += boardColour+' | ' 
+            if j == References.symbols['Hit']:
+                string += hitColour + j + resetColour
+            elif j == References.symbols['Miss']:
+                string += missColour + j + resetColour
+            elif j == References.symbols['Sunk']:
+                string += sunkColour + j + resetColour
+            else:
+                string += shipColour + j + resetColour
+        string += boardColour + ' |\n' + resetColour
+        yLabel -= 1
+    string += xLabelColour + '    0   1   2   3   4   5   6   7   8   9' + resetColour
+    print(string)
+
 @socketio.on('startGame')
 def runGame(params):
+    print("params", params)
     instances[request.sid] = game = Battleships(p1auto=False, p2auto=True, aiLevelP2=1)
     print(request.sid, " id", instances)
 
     playerFirst = True
-    setBoard(game, 'P1')
+    # setBoard(game, 'P1')
+
+    paramsConverted = []
+    for ship in params:
+        if(ship[2] == 0): # if the ship is horizontal
+            paramsConverted.append([ship[0], (ship[1]["x"], 9 - ship[1]["y"]), ship[2]]) # converts position to a tuple and positioning for y coordinate
+        else: # if the ship is vertical
+            paramsConverted.append([ship[0], (ship[1]["x"], 10 - ship[1]["y"] - References.ships[ship[0]]), ship[2]]) # fixes differences in encoding of ship rotation for vertical ships
+
+    game.setFleetLocation('P1', paramsConverted)
+
+    printBoard(game.getPlayerBoard("P1"))
+    
     # while not game.getWinner():
     #     if playerFirst != 0:
     #         result, location = takeShotAt(game, "P2", "P1")

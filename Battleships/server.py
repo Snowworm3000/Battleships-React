@@ -38,9 +38,30 @@ def move(json):
         # break
     print(str(result), "🤮")
     # return [result, request.sid]
+    compMove()
     return result
     # return "hit"
 
+def compMove():
+    game = instances[request.sid]
+
+    result, location = takeShotAt(game, "P2", "P1")
+    print(location, result, "output")
+    if result == 'P':
+        # printWinner('lose')
+        print("lose")
+        return
+    # when a ship is sunk, all squares from that ship are returned, not in hit order
+    # TODO could rewrite so that only the last shot taken is reported and a sunk message given.
+    if result in References.ships: # ship name only returned on sink event
+        print(f"\nComputer fired at {location[0]} \nand sunk your {result}\n")
+        output = {'location': {'x': location[0][0], 'y': location[0][1]}, "result": result}
+    else:
+        print('\nComputer fired at: {loc} \nand it was a {res}\n'.format(loc=location, res=result))
+        output = {'location': {'x': location[0], 'y': location[1]}, "result": result}
+    print(output)
+    socketio.emit("compMove", output)
+    print("emitted")
 
 def takeShotAt(gameInstance, activePlayer, target):
     invalid = True

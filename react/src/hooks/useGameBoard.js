@@ -1,91 +1,7 @@
 import { useState, useRef, useEffect, useCallback, useLayoutEffect } from "react";
 import { getId, gridPosition, nextTileIndex } from "../utils/common";
+import { createEmptyGrid, movePosition, resetGameBoard } from "../utils/gameLogic";
 
-const resetGameBoard = (rows, cols) => {
-  // Index restarts from 0 on reset
-  // resetTileIndex();
-  const grid = createEmptyGrid(rows, cols);
-  const newTiles = []
-  // const emptyCells = getEmptyCellsLocation(grid);
-  // const newTiles = createRandomTiles(emptyCells, rows * cols >= 24 ? 4 : 2);
-
-  // newTiles.forEach((tile) => {
-  //   grid[tile.r][tile.c] = tile;
-  // });
-
-  return {
-    grid,
-    tiles: newTiles,
-  };
-};
-
-const createNewTile = (row, col, hitType) => {
-  const index = nextTileIndex();
-  const id = getId(index);
-  return {
-    index,
-    id,
-    row,
-    col,
-    isNew: true,
-    value: hitType == "Miss" ? 0 : 1,
-  };
-};
-
-const createRow = (rows, cb) =>
-  Array.from(Array(rows)).map((_, r) => cb(r));
-
-const createEmptyGrid = (rows, cols) =>
-  createRow(rows, () => createRow(cols, () => undefined));
-
-const isWin = () => {
-  return false
-}
-
-const types = {
-  miss: 0,
-  hit: 1,
-  sink: 2
-}
-const hitType = (x, y) => { // TODO: Change hitType dynamically depending on the value recieved from the server
-  return types.miss
-}
-
-
-const movePosition = (grid, gridRef, row, col, hitType) => {
-  const newGrid = grid.slice(0);
-  const totalRows = newGrid.length;
-  const totalCols = newGrid[0].length;
-  const tiles = [];
-
-  // const tile = newGrid[row][col];
-
-  console.log(newGrid, gridRef.current, "the grid", row, col)
-
-  // const currentTile = newGrid[row][col]
-  // if (currentTile != null) {
-  //   tiles.push({ ...currentTile, value: hitType(), isNew: false });
-  // } else {
-  //   const updatedTile = {
-  //     ...tile,
-  //     value: hitType(),
-  //     row: row,
-  //     col: col,
-  //     isNew: false,
-  //   };
-  const newTile = createNewTile(row, col, hitType)
-  newGrid[row][col] = newTile;
-
-  //   tiles.push(updatedTile);
-  // }
-
-  tiles.push(newTile)
-
-  return {
-    tiles,
-    grid: newGrid,
-  };
-}
 
 
 function useGameBoard({
@@ -99,7 +15,6 @@ function useGameBoard({
   const gridRef = useRef(createEmptyGrid(rows, cols));
   // const [grid, setGrid] = useState(createEmptyGrid(rows, cols))
   const [tiles, setTiles] = useState([]);
-  const [tiles2, setTiles2] = useState([])
   const pendingStackRef = useRef([]);
   const [moving, setMoving] = useState(false);
 
@@ -121,7 +36,7 @@ function useGameBoard({
 
 
   function moveResult(gridX,gridY,hitType){
-    console.log(gridX - 1, gridY - 1)
+    console.log(gridX - 1, gridY - 1, hitType)
       const { grid, tiles: newTiles } = movePosition(
         gridRef.current,
         gridRef,
@@ -144,8 +59,6 @@ function useGameBoard({
 
       const arrayToSet = [newTiles[0], ...tiles]
       // const arrayToSet = "testing"
-
-      console.log(tiles, newTiles[0], [newTiles[0], ...tiles2])
       setTiles(prev => [newTiles[0], ...prev]);
       // setTiles(["testing", 52])
       console.log(tiles, arrayToSet, "new tiles", [newTiles[0]])

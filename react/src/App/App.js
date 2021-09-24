@@ -16,6 +16,8 @@ import Draggable from '../components/Battleships/Draggable';
 import BattleshipContainer from '../components/Battleships/Container';
 import { battleshipsConfig, battleshipsNames, isValidPosition, rotation } from '../constants/battleships';
 import { useRef } from 'react';
+import PlayerBoard from '../components/GameBoard/PlayerBoard';
+import OpponentBoard from '../components/GameBoard/OpponentBoard';
 
 function App() {
   const rows = 10
@@ -41,7 +43,7 @@ function App() {
   );
 
   
-  const {serverMove, pending, startGame} = useClient()
+  const {serverMove, pending, startGame, tilesOpponent} = useClient()
 
   const { tiles, onMove } = useGameBoard({
     rows,
@@ -161,7 +163,7 @@ function App() {
         <TileContainer
           inlineSize={`${gridSize}px`}
         >
-          <GameBoard
+          {/* <GameBoard
             tiles={tiles}
             rows={rows}
             cols={cols}
@@ -173,6 +175,26 @@ function App() {
             setDragging={setDraggingBoard}
             battleshipTemp={battleshipHover}
             battleshipBoard={battleshipBoard}
+          /> */}
+          <PlayerBoard
+            tiles={tilesOpponent}
+            rows={rows}
+            cols={cols}
+            spacing={spacing}
+            boardSize={gridSize}
+            rotation={battleshipRotation}
+            addBattleship={addBattleship}
+            setDragging={setDraggingBoard}
+            battleshipTemp={battleshipHover}
+            battleshipBoard={battleshipBoard}
+          />
+          <OpponentBoard
+            tiles={tiles}
+            rows={rows}
+            cols={cols}
+            spacing={spacing}
+            boardSize={gridSize}
+            onMove={onMove}
           />
         </TileContainer>
         {/* <p>Opponent</p>

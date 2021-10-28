@@ -57,11 +57,12 @@ function useGameBoard({
       //   // so that transform animation won't be interrupted by rerending
       //   // when id is not changed.
 
-      const arrayToSet = [newTiles[0], ...tiles]
-      // const arrayToSet = "testing"
-      setTiles(prev => [newTiles[0], ...prev]);
-      // setTiles(["testing", 52])
-      console.log(tiles, arrayToSet, "new tiles", [newTiles[0]])
+      setTiles(prev => newTiles)
+      // const arrayToSet = [newTiles[0], ...tiles]
+      // // const arrayToSet = "testing"
+      // setTiles(prev => [newTiles[0], ...prev]);
+      // // setTiles(["testing", 52])
+      // console.log(tiles, arrayToSet, "new tiles", [newTiles[0]])
       // }
   }
 

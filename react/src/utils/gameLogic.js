@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useLayoutEffect } from "react";
+import { rotation } from "../constants/battleships";
 import { getId, gridPosition, nextTileIndex } from "../utils/common";
 
 export const resetGameBoard = (rows, cols) => {
@@ -53,7 +54,55 @@ export const hitType = (x, y) => { // TODO: Change hitType dynamically depending
     return types.miss
   }
   
-export const replaceWithSunkShip = (grid, ) => {
+const getRotation = (from, to) => {
+  if(from.x != to.x){
+    return rotation.horizontal
+  } else {
+    return rotation.vertical
+  }
+}
+
+export const replaceWithSunkShip = (grid, from, to, hitType) => {
+  console.log("replacing ", hitType, from, to)
+  const shipRotation = getRotation(from, to)
+
+  const newGrid = grid.slice(0);
+  const totalRows = newGrid.length;
+  const totalCols = newGrid[0].length;
+  const tiles = [];
+
+  console.log(newGrid, " new grid!")
+
+  for(let y = 0; y<10;y++){
+    for(let x = 0; x<10;x++){
+      console.log(y, x, "loop")
+      if(newGrid[y][x]){ // Check if a hit is in the location
+        // if(shipRotation == rotation.horizontal){
+        //   if(from.y == newGrid[i][j].y && newGrid[i][j].x >= from.x && newGrid[i][j].x <= to.x){ // Check if the location is a sunk battleship position
+        //     // newGrid[i][j] = 
+        //     // TODO: Set grid position to sunk
+        //   }
+        // } else {
+        //   if(from.x == newGrid[i][j].x && newGrid[i][j].y >= from.y && newGrid[i][j].y <= to.y){
+        //     // TODO: Set grid position to sunk here as well
+        //   }
+        // }
+
+        if(shipRotation == rotation.horizontal){
+          if(from.y == y && x >= from.x && x <= to.x){ // Check if the location is a sunk battleship position
+            // newGrid[i][j] = 
+            // TODO: Set grid position to sunk
+            console.log("replace h", y, x)
+          }
+        } else {
+          if(from.x == x && y >= from.y && y <= to.y){
+            // TODO: Set grid position to sunk here as well
+            console.log("replace v", y, x)
+          }
+        }
+      }
+    }
+  }
 
 }
   
@@ -87,8 +136,17 @@ export const movePosition = (grid, gridRef, row, col, hitType) => {
   
     //   tiles.push(updatedTile);
     // }
+
+    for(let i = 0; i<10;i++){
+      for(let j = 0; j<10;j++){
+        const tile = newGrid[i][j]
+        if(tile != null){
+          tiles.push(tile)
+        }
+      }
+    }
   
-    tiles.push(newTile)
+    // tiles.push(newTile)
     console.log(tiles, "tiles")
   
     return {

@@ -54,10 +54,10 @@ def compMove():
     # TODO could rewrite so that only the last shot taken is reported and a sunk message given.
     if result in References.ships: # ship name only returned on sink event
         print(f"\nComputer fired at {location[0]} \nand sunk your {result}\n")
-        output = {'location': {'x': location[0][0], 'y': location[0][1]}, "result": result}
+        output = {'location': {'from': {'x': location[0][0], 'y': location[0][1]}, 'to': {'x': location[-1][0], 'y': location[-1][1]}}, "result": result} # Gives the start and end of ship. Frontend needs to remove these locations including spaces between, then place a destroyed battleship in its location.
     else:
         print('\nComputer fired at: {loc} \nand it was a {res}\n'.format(loc=location, res=result))
-        output = {'location': {'x': location[0], 'y': location[1]}, "result": result}
+        output = {'location': {'x': location[0][0], 'y': location[0][1]}, "result": result}
     print(output)
     socketio.emit("compMove", output)
     print("emitted")
@@ -153,7 +153,7 @@ def printBoard(board):
 @socketio.on('startGame')
 def runGame(params):
     print("params", params)
-    instances[request.sid] = game = Battleships(p1auto=False, p2auto=True, aiLevelP2=1)
+    instances[request.sid] = game = Battleships.Battleships(p1auto=False, p2auto=True, aiLevelP2=1)
     print(request.sid, " id", instances)
 
     playerFirst = True

@@ -216,5 +216,6 @@ def cleanup(): # removes session data associated with client
 
 if(__name__ == '__main__'):
     # app.run(debug=True)
+    print("start")
     socketio.run(app)
     runGame()

@@ -8,6 +8,7 @@ const theme = {
     gridOutline: "#333333",
     hit: "#ff00006c",
     miss: "#ffffff6c",
+    sink: "#0000006c",
     primary: "#000000"
   },
   fonts: ["sans-serif", "Roboto"],

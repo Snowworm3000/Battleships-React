@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { useEffect } from "react/cjs/react.development";
 import io from "socket.io-client"
-import { battleshipsConfig } from "../constants/battleships";
-import { createEmptyGrid, movePosition, replaceWithSunkShip } from "../utils/gameLogic";
+import { battleshipsConfig, rotation } from "../constants/battleships";
+import { createEmptyGrid, getRotation, movePosition, replaceWithSunkShip } from "../utils/gameLogic";
 
 
 function useClient() {
@@ -41,9 +41,25 @@ function useClient() {
             // TODO: Replace tiles here with destroyed battleship
             const battleshipLength = battleshipsConfig[hitType]
             console.log("ship size", battleshipLength)
+
             const from = gridX
             const to = gridY
-            replaceWithSunkShip(gridRef.current, from, to, hitType)
+            const shipRotation = getRotation(from, to)
+            // from.x -= 1
+            if(shipRotation == rotation.horizontal){
+                from.y = 9 - from.y
+                // to.x -= 1
+                to.y = 9- to.y
+            } else {
+                console.log("no change")
+                from.y = 9 - from.y
+                to.y = 9- to.y
+            }
+            const result = replaceWithSunkShip(gridRef.current, from, to, hitType)
+            newTiles = result.tiles
+            gridRef.current = result.grid
+
+            console.log("sunk ship", result)
             
         }
         // pendingStackRef.current = moveStack;

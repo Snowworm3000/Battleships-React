@@ -68,7 +68,6 @@ function App() {
 
   function setDragging(battleship){ // if dragging is null, set the position of the battleship
     // battleshipPositions.current.dragging = battleship
-    // console.log("setDragging", battleshipPositions)
 
     if(battleship){
       battleshipDragging.current = battleship
@@ -77,7 +76,6 @@ function App() {
       // setBattleshipBoard(prev => [...prev, battleshipHover]) // TODO: This seemed to be causing an issue with two battleships being created in the same position but delayed until after a dragged battleship moved back.
       // setBattleshipHover(null)
     }
-    console.log("setDragging", battleshipDragging.current)
   }
   function setDraggingBoard(battleship){
     if(battleship){
@@ -85,10 +83,8 @@ function App() {
     } else {
       battleshipDragging.current = null
     }
-    console.log("removing", battleshipBoard)
     setBattleshipBoard((prev) => {
       const index = prev.findIndex(element => element.battleship == battleship)
-      console.log(index, "index", battleship)
         if(index > -1){
           prev.splice(index, 1)
         }
@@ -101,37 +97,31 @@ function App() {
       // battleshipPositions.current.hover = {x,y, battleship}
       const setTo = {x,y,battleship}
       if(battleshipHover != setTo){ // TODO: should prevent multiple rerenders when hovering on the same square position
-        console.log("!=", setTo, battleshipHover)
         setBattleshipHover(setTo)
       }
     } else {
       // battleshipPositions.current.board.push({x,y, battleship})
       // battleshipPositions.current.hover = null
       const validMove = isValidPosition(rotationRef.current ? x : y, battleshipsConfig[battleship])
-      console.log(validMove, rotationRef.current)
       
       setBattleshipHover(null)
       
       if(validMove){
         setBattleshipBoard((prev) => [{x,y,battleship, savedRotation:rotationRef.current}, ...prev])
 
-        console.log("🙉 Set battleship not hover", battleship, rotationRef.current)
         setBattleshipContainer(prev => {
           // if()
           const index = prev.indexOf(battleship)
           if(index > -1){
             prev.splice(index, 1)
           }
-          console.log(battleship, prev, "checking")
           // return prev.splice(prev.indexOf(battleship), 1)
           return prev
         })
       } else {
-        console.log("invalid move")
       }
 
     } 
-    console.log(battleshipDragging.current)
   }
   
   const [battleshipRotation, setBattleshipRotation] = useState(rotation.horizontal)
@@ -139,7 +129,6 @@ function App() {
 
   useEffect(() => {
     rotationRef.current = battleshipRotation;
-    console.log(rotationRef, "changed 🐯")
   }, [battleshipRotation])
 
   function toggleRotation(){

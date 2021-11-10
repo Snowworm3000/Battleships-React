@@ -14,7 +14,6 @@ const StyledTileValue = styled.div`
   background-color: ${props => {
     const colors = props.theme.colors;
     const types = [colors.miss, colors.hit, colors.sink]
-    // console.log(props.value, types, types[props.value], "colours 👾")
     return types[props.value]
   }};
   color: ${props => props.theme.colors.primary};

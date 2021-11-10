@@ -23,7 +23,6 @@ export const resetGameBoard = (rows, cols) => {
 export const createNewTile = (row, col, hitType) => {
     const index = nextTileIndex();
     const id = getId(index);
-    console.log("hit type", hitType, hitType == "Miss" ? 0 : 1)
     // debugger
     return {
       index,
@@ -63,7 +62,6 @@ export const getRotation = (from, to) => {
 }
 
 export const replaceWithSunkShip = (grid, from, to, hitType) => {
-  console.log("replacing ", hitType, from, to)
   const shipRotation = getRotation(from, to)
 
   const newGrid = grid.slice(0);
@@ -71,13 +69,11 @@ export const replaceWithSunkShip = (grid, from, to, hitType) => {
   const totalCols = newGrid[0].length;
   // const tiles = [];
 
-  console.log(newGrid, " new grid!")
 
   // newGrid[]
 
   for(let y = 0; y<10;y++){
     for(let x = 0; x<10;x++){
-      console.log(y, x, "loop")
       // if(newGrid[y][x]){ // Check if a hit is in the location
         // if(shipRotation == rotation.horizontal){
         //   if(from.y == newGrid[i][j].y && newGrid[i][j].x >= from.x && newGrid[i][j].x <= to.x){ // Check if the location is a sunk battleship position
@@ -98,12 +94,10 @@ export const replaceWithSunkShip = (grid, from, to, hitType) => {
             if(tile){
               tile.value = 2
               newGrid[y][x] = tile
-              console.log("replace h", y, x)
             }else{
               tile = createNewTile(y, x, "Miss")
               tile.value = 2
               newGrid[y][x] = tile
-              console.log("replace h", y, x)
             }
           }
         } else {
@@ -113,12 +107,10 @@ export const replaceWithSunkShip = (grid, from, to, hitType) => {
             if(tile){
               tile.value = 2
               newGrid[y][x] = tile
-              console.log("replace h", y, x)
             }else{
               tile = createNewTile(y, x, "Miss")
               tile.value = 2
               newGrid[y][x] = tile
-              console.log("replace h", y, x)
             }
           }
         }
@@ -167,11 +159,8 @@ export const movePosition = (grid, gridRef, row, col, hitType) => {
     //     isNew: false,
     //   };
     const newTile = createNewTile(row, col, hitType)
-    console.log(newTile)
     // debugger
-    console.log(row, col)
     newGrid[row][col] = newTile;
-    console.log(newGrid, gridRef.current, "the grid", row, col)
   
     //   tiles.push(updatedTile);
     // }
@@ -186,7 +175,6 @@ export const movePosition = (grid, gridRef, row, col, hitType) => {
     }
   
     // tiles.push(newTile)
-    console.log(tiles, "tiles")
   
     return {
       tiles,

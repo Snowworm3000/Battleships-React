@@ -6,7 +6,6 @@ import Battleship from './Battleship'
 function Draggable({length, lengthMultiplier, setDragging, draggable, rotation, name, ...props}) {
 
     function handleDrag(e){
-        console.log("dragging", name)
         setDragging(name)
     }
 
@@ -17,7 +16,6 @@ function Draggable({length, lengthMultiplier, setDragging, draggable, rotation, 
     const pixelLength = length * lengthMultiplier
     const height = rotation ? lengthMultiplier:pixelLength
     const width = rotation ? pixelLength:lengthMultiplier
-    console.log(width, height, " changed 🦁")
     return (
         <>
             <Battleship onDragStart={handleDrag} onDragEnd={handleDragEnd} height={height} width={width} draggable='true' src={rotation ? image : imageRotated} rotation={rotation}  {...props}></Battleship>

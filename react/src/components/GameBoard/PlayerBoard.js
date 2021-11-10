@@ -15,7 +15,6 @@ function GameBoard({ rows, cols, spacing, boardSize, rotation, setDragging, tile
     return cells.map((c) => <Cell key={c} addBattleship={addBattleship} position={c}/>);
   }, [rows, cols]);
 
-  console.log(tiles, " tiles opponent rerender 🐧")
 
   return (
     <div >

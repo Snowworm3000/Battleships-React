@@ -5,10 +5,8 @@ export default function Cell(props) {
     function handleOver(event){
         
 
-        console.log("drag over", props.position)
         const y = Math.floor(props.position/10)
         const x = props.position%10
-        console.log(x,y)
         props.addBattleship(x,y, true)
         event.stopPropagation();
         event.preventDefault();
@@ -23,7 +21,6 @@ export default function Cell(props) {
         // debugger
         const y = Math.floor(props.position/10)
         const x = props.position%10
-        console.log(x,y)
         props.addBattleship(x,y, false)
 
         // event.stopPropagation(); 

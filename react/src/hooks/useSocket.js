@@ -14,7 +14,6 @@ function useClient() {
     const cols = 10
     const gridRef = useRef(createEmptyGrid(rows, cols));
 
-    console.log("reload 👽")
 
     let pending = useRef(true) // TODO: Whether the client can make a move or not. This should be set on the server as well.
 
@@ -23,7 +22,6 @@ function useClient() {
         // debugger
         let newTiles = []
         if (hitType == "Miss" || hitType == "Hit") {
-            console.log(gridX - 1, gridY - 1)
             const moveResult = movePosition(
                 gridRef.current,
                 gridRef,
@@ -36,11 +34,9 @@ function useClient() {
 
             gridRef.current = grid;
 
-            console.log("move", grid)
         } else {
             // TODO: Replace tiles here with destroyed battleship
             const battleshipLength = battleshipsConfig[hitType]
-            console.log("ship size", battleshipLength)
 
             const from = gridX
             const to = gridY
@@ -51,7 +47,6 @@ function useClient() {
                 // to.x -= 1
                 to.y = 9- to.y
             } else {
-                console.log("no change")
                 from.y = 9 - from.y
                 to.y = 9- to.y
             }
@@ -59,7 +54,6 @@ function useClient() {
             newTiles = result.tiles
             gridRef.current = result.grid
 
-            console.log("sunk ship", result)
             
         }
         // pendingStackRef.current = moveStack;
@@ -79,13 +73,11 @@ function useClient() {
         // setTiles(["testing", 52])
 
 
-        // console.log(tilesOpponent, arrayToSet, "new tilesOpponent", [newTiles[0]])
         // }
     }
 
     function startGame(params) {
         socket.current.emit("startGame", formatParams(params), response)
-        console.log("start")
     }
 
     function formatParams(params) {
@@ -99,23 +91,17 @@ function useClient() {
     }
 
     function response(response) {
-        console.log(response, " response 🤖")
         pending.current = (!response)
-        console.log(pending)
     }
 
 
     function onMove(x, y, cb) {
-        console.log("move")
         socket.current.emit("move", { x, y }, function (response) {
-            console.log("👺", response)
             cb(response) // TODO: Not getting called
-            console.log("callback complete")
         })
     }
 
     // function responseMove(response){
-    //     console.log("👺",response)
     // }
 
     useEffect(() => {
@@ -123,16 +109,12 @@ function useClient() {
             socket.current.emit('my event', { data: 'I\'m connected!' });
         });
         socket.current.on('compMove', (response) => {
-            console.log("comp move", response)
             const { location, result: hitType } = response
             // debugger
-            // console.log(location, " loc")
-            // console.log(tilesOpponent, " tiles opponent 🐻")
             // moveResult(location.x + 1, 10 - location.y , hitType)
             if (hitType == "Miss" || hitType == "Hit") {
                 moveResult(location.x + 1, 10 - location.y, hitType)
             } else {
-                console.log("🦋 destroyed")
                 moveResult(location.from, location.to, hitType) // TODO: Continue here
             }
         })

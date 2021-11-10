@@ -7,7 +7,6 @@ import Outline from './Outline'
 
 function BoardContainer({tileWidth, tileHeight, rotation, setDragging, battleshipTemp, battleshipBoard, ...props}) {
 
-    console.log( "battle", tileHeight, tileWidth, props, rotation)
     // const placedShips = battleships.current.board
     // const tempShipConfig = battleships.current.hover
 
@@ -28,7 +27,6 @@ function BoardContainer({tileWidth, tileHeight, rotation, setDragging, battleshi
         // position="absolute"
         // key={battleshipTemp.battleship}
         // />)
-        // console.log("set new temp ship")
 
         setTempShip(battleshipTemp == null ? null : <Outline
             x={calcLocation(tileWidth, battleshipTemp.x, props.spacing)}
@@ -57,7 +55,6 @@ function BoardContainer({tileWidth, tileHeight, rotation, setDragging, battleshi
         position="absolute"
         key={battleship}
         />))
-        console.log("set new ship", battleshipBoard, battleshipTemp)
     }, [battleshipBoard])
     
     return (

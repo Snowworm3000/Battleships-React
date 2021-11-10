@@ -24,24 +24,18 @@ function GameBoard({ rows, cols, spacing, boardSize, rotation, setDragging, tile
   // useClickListener(boardRef, onMove)
 
   function handleClick(e) {
-    console.log(e, "click")
     // onMove(e)
     const rect = e.currentTarget.getBoundingClientRect()
     var x = e.clientX - rect.left; //x position within the element.
     var y = e.clientY - rect.top; //y position within the element.
-    console.log(x, y)
     onMove(x, y, rect.width, rect.height)
   }
 
   useEffect(() => {
-    console.log(tiles)
     
-    console.log("done")
   }, [tiles])
-  console.log(tiles)
 
 
-  console.log(tileWidth, tileHeight)
   return (
     <div >
       <StyledGrid onClick={handleClick}

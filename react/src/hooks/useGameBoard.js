@@ -21,14 +21,9 @@ function useGameBoard({
   const onMove = useCallback((x, y, width, height) => {
     if (!pending.current) {
       const { gridX, gridY } = gridPosition(x, y, width, height, rows, cols)
-      // console.log(x, y)
-      // console.log(width, height)
-      // console.log(rows, cols)
-      console.log(tiles, "tiles")
 
       // let response
       serverMove(gridX -1 , gridY -1, (hitType) => moveResult(gridX, gridY, hitType))
-      // console.log(response, " yay👀")
 
       
     }
@@ -36,7 +31,6 @@ function useGameBoard({
 
 
   function moveResult(gridX,gridY,hitType){
-    console.log(gridX - 1, gridY - 1, hitType)
       const { grid, tiles: newTiles } = movePosition(
         gridRef.current,
         gridRef,
@@ -46,7 +40,6 @@ function useGameBoard({
       );
       gridRef.current = grid;
 
-      console.log("move", grid)
       // pendingStackRef.current = moveStack;
 
       setMoving(true)
@@ -62,7 +55,6 @@ function useGameBoard({
       // // const arrayToSet = "testing"
       // setTiles(prev => [newTiles[0], ...prev]);
       // // setTiles(["testing", 52])
-      // console.log(tiles, arrayToSet, "new tiles", [newTiles[0]])
       // }
   }
 
@@ -91,7 +83,6 @@ function useGameBoard({
     const { grid, tiles: newTiles } = resetGameBoard(rows, cols);
     setTiles(newTiles)
     gridRef.current = grid;
-    console.log("reset 😡")
     // setGameStatus('running');
   }, [rows, cols, setGameStatus]);
 
@@ -100,7 +91,6 @@ function useGameBoard({
       const r = gridRef.current.length;
       const c = gridRef.current[0].length;
       const { grid } = resetGameBoard(r, c);
-      console.log("restart 😡")
 
       gridRef.current = grid;
       // setGameStatus('running');

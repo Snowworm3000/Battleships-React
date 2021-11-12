@@ -18,6 +18,7 @@ import { battleshipsConfig, battleshipsNames, isValidPosition, rotation } from '
 import { useRef } from 'react';
 import PlayerBoard from '../components/GameBoard/PlayerBoard';
 import OpponentBoard from '../components/GameBoard/OpponentBoard';
+import Startup from '../components/Startup';
 
 function App() {
   const rows = 10
@@ -147,6 +148,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
+        
         <h1>Battleships</h1>
         <p>Fleet</p>
         <TileContainer
@@ -201,6 +203,7 @@ function App() {
       {/* <div onDragOver={() => console.log("hover")} onDrop={()=> console.log("drop")}>
         test
       </div> */}
+      <Startup/>
     </ThemeProvider>
   );
 }
